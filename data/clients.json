@@ -1,0 +1,11 @@
+[
+    {
+        "id": 1,
+        "prenom": "Mathieu",
+        "nom": "Germain",
+        "age": 38,
+        "adresse": "1029 rue Trembley, J1H 2E5",
+        "pays": "Canada",
+        "panier": []
+    }
+]
