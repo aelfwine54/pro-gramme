@@ -8,6 +8,7 @@ const ValidationError = require('express-validation').ValidationError;
 const html = require('./routes/html');
 const commerces = require('./routes/commerces');
 const clients = require('./routes/clients');
+const categories = require('./routes/categories');
 
 app.use(express.static('client'));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -29,5 +30,6 @@ app.get('/', function(req, res) {
 app.use('/html', html);
 app.use('/commerces', commerces);
 app.use('/clients', clients);
+app.use('/categories', categories);
 
 app.listen(port, () => console.log(`Pro-gramme écoute au http://localhost:${port}`));
