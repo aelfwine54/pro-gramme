@@ -1,8 +1,7 @@
 const express = require('express');
-
-const GestionProduits = require('./../gestion/gestionProduits');
-
 const { validate, Joi } = require('express-validation');
+const gProduits = require('./../util/gestionnaires').gProduits;
+const router = express.Router();
 
 const adresseIdValidation = {
   params: Joi.object({
@@ -42,14 +41,11 @@ const rechercherProduitValidation = {
   })
 };
 
-const router = express.Router();
-const gProduit = new GestionProduits();
-
 /**
  * Ajoute un nouveau client. S'utilise avec une requête de type POST.
  * Il faut passer dans le corps de la requête une description complète sous forme de JSON.
  */
-router.post('/', validate(nouveauProduitValidation), gProduit.ajouteProduit.bind(gProduit));
+router.post('/', validate(nouveauProduitValidation), gProduits.ajouteProduit.bind(gProduits));
 
 /**
  * Retourne l'ensemble des clients. On peut filtrer les résultats.
@@ -57,22 +53,22 @@ router.post('/', validate(nouveauProduitValidation), gProduit.ajouteProduit.bind
  * La requête pour filtrer sera de la forme /clients?prenom=bla&nom=blo&age=2&pays=Canada&adresse=adre
  * Attention les espaces ne sont pas permis, il faut les remplacer par %20
  */
-router.get('/', validate(rechercherProduitValidation, {}, {}), gProduit.recupereProduit.bind(gProduit));
+router.get('/', validate(rechercherProduitValidation, {}, {}), gProduits.recupereProduit.bind(gProduits));
 
 /**
  * Retourne le client id
  */
-router.get('/:id', validate(adresseIdValidation, {}, {}), gProduit.recupereProduit.bind(gProduit));
+router.get('/:id', validate(adresseIdValidation, {}, {}), gProduits.recupereProduit.bind(gProduits));
 
 /**
  * Modifie un client. Le id dans l'adresse est obligatoire. Les autres informations dans le body sont optionnelles.
  * Au moins une devrait toutefois être modifiée, sinon la requête est un peu inutile
  */
-router.put('/:id', validate(modifierProduitValidation, {}, {}), gProduit.modifierProduit.bind(gProduit));
+router.put('/:id', validate(modifierProduitValidation, {}, {}), gProduits.modifierProduit.bind(gProduits));
 
 /**
  * Efface un client. Attention, c'est permanent!
  */
-router.delete('/:id', validate(adresseIdValidation, {}, {}), gProduit.effaceProduit.bind(gProduit));
+router.delete('/:id', validate(adresseIdValidation, {}, {}), gProduits.effaceProduit.bind(gProduits));
 
 module.exports = router;

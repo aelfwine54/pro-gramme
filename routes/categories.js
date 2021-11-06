@@ -1,7 +1,7 @@
 const express = require('express');
-const GestionProduit = require('./../gestion/gestionProduits');
 const { validate, Joi } = require('express-validation');
 const router = express.Router();
+const gProduits = require('../util/gestionnaires').gProduits;
 
 const adresseIdValidation = {
   params: Joi.object({
@@ -33,13 +33,11 @@ const rechercherCategorieValidation = {
   })
 };
 
-const gProduit = new GestionProduit();
-
 /**
  * Ajoute une nouvelle catégorie. S'utilise avec une requête de type POST.
  * Il faut passer dans le corps de la requête une description complète sous forme de JSON.
  */
-router.post('/', validate(nouvelleCategorieValidation), gProduit.ajouteCategorie.bind(gProduit));
+router.post('/', validate(nouvelleCategorieValidation), gProduits.ajouteCategorie.bind(gProduits));
 
 /**
  * Retourne l'ensemble des catégories. On peut filtrer les résultats.
@@ -47,22 +45,22 @@ router.post('/', validate(nouvelleCategorieValidation), gProduit.ajouteCategorie
  * La requête pour filtrer sera de la forme /categories?&nom=blo&description=texte
  * Attention les espaces ne sont pas permis, il faut les remplacer par %20
  */
-router.get('/', validate(rechercherCategorieValidation, {}, {}), gProduit.recupereCategorie.bind(gProduit));
+router.get('/', validate(rechercherCategorieValidation, {}, {}), gProduits.recupereCategorie.bind(gProduits));
 
 /**
  * Retourne la categorie ayant l'id id
  */
-router.get('/:id', validate(adresseIdValidation, {}, {}), gProduit.recupereCategorie.bind(gProduit));
+router.get('/:id', validate(adresseIdValidation, {}, {}), gProduits.recupereCategorie.bind(gProduits));
 
 /**
  * Modifie une categorie. Le id dans l'adresse est obligatoire. Les autres informations dans le body sont optionnelles.
  * Au moins une devrait toutefois être modifiée, sinon la requête est un peu inutile
  */
-router.put('/:id', validate(modifierCategorieValidation, {}, {}), gProduit.modifierCategorie.bind(gProduit));
+router.put('/:id', validate(modifierCategorieValidation, {}, {}), gProduits.modifierCategorie.bind(gProduits));
 
 /**
  * Efface une categorie. Attention, c'est permanent!
  */
-router.delete('/:id', validate(adresseIdValidation, {}, {}), gProduit.effaceCategorie.bind(gProduit));
+router.delete('/:id', validate(adresseIdValidation, {}, {}), gProduits.effaceCategorie.bind(gProduits));
 
 module.exports = router;

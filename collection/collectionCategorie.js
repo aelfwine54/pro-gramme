@@ -11,7 +11,7 @@ const path = require('path');
 class CollectionCategorie {
   constructor() {
     this.liste_categories = [];
-    this.CHEMIN_PAR_DEFAUT = path.join(__dirname, '/../data/catagories.json');
+    this.CHEMIN_PAR_DEFAUT = path.join(__dirname, '/../data/repo/catagories.json');
   }
 
   chargerCategorie(fichier) {

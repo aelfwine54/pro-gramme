@@ -9,6 +9,7 @@ class GestionProduits {
     this.collectionCategorie = new CollectionCategorie();
     this.collectionProduit = new CollectionProduit();
     this.collectionCategorie.chargerCategorie();
+    this.collectionProduit.chargerProduit();
   }
 
   /**

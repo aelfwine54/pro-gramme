@@ -11,7 +11,7 @@ const path = require('path');
 class CollectionClient {
   constructor() {
     this.liste_clients = [];
-    this.CHEMIN_PAR_DEFAUT = path.join(__dirname, '/../data/clients.json');
+    this.CHEMIN_PAR_DEFAUT = path.join(__dirname, '/../data/repo/clients.json');
   }
 
   chargerClients(fichier) {

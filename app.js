@@ -9,6 +9,7 @@ const html = require('./routes/html');
 const commerces = require('./routes/commerces');
 const clients = require('./routes/clients');
 const categories = require('./routes/categories');
+const produits = require('./routes/produits');
 
 app.use(express.static('client'));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -31,5 +32,6 @@ app.use('/html', html);
 app.use('/commerces', commerces);
 app.use('/clients', clients);
 app.use('/categories', categories);
+app.use('/produits', produits);
 
 app.listen(port, () => console.log(`Pro-gramme écoute au http://localhost:${port}`));

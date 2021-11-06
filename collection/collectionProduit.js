@@ -6,7 +6,7 @@ const path = require('path');
 class CollectionProduit {
   constructor() {
     this.liste_produits = [];
-    this.CHEMIN_PAR_DEFAUT = path.join(__dirname, '/../data/produits.json');
+    this.CHEMIN_PAR_DEFAUT = path.join(__dirname, '/../data/repo/produits.json');
   }
 
   /**

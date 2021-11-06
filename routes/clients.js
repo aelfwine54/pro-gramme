@@ -1,19 +1,8 @@
 const express = require('express');
-
-const GestionClient = require('./../gestion/gestionClient');
-
+const gClients = require('./../util/gestionnaires').gClients;
 const { validate, Joi } = require('express-validation');
 
-// const loginValidation = {
-//   body: Joi.object({
-//     email: Joi.string()
-//       .email()
-//       .required(),
-//     password: Joi.string()
-//       .regex(/[a-zA-Z0-9]{3,30}/)
-//       .required(),
-//   }),
-// };
+const router = express.Router();
 
 const adresseIdValidation = {
   params: Joi.object({
@@ -54,14 +43,11 @@ const rechercherClientValidation = {
   })
 };
 
-const router = express.Router();
-const gClient = new GestionClient();
-
 /**
  * Ajoute un nouveau client. S'utilise avec une requête de type POST.
  * Il faut passer dans le corps de la requête une description complète sous forme de JSON.
  */
-router.post('/', validate(nouveauClientValidation), gClient.ajouteClient.bind(gClient));
+router.post('/', validate(nouveauClientValidation), gClients.ajouteClient.bind(gClients));
 
 /**
  * Retourne l'ensemble des clients. On peut filtrer les résultats.
@@ -69,22 +55,22 @@ router.post('/', validate(nouveauClientValidation), gClient.ajouteClient.bind(gC
  * La requête pour filtrer sera de la forme /clients?prenom=bla&nom=blo&age=2&pays=Canada&adresse=adre
  * Attention les espaces ne sont pas permis, il faut les remplacer par %20
  */
-router.get('/', validate(rechercherClientValidation, {}, {}), gClient.recupereClient.bind(gClient));
+router.get('/', validate(rechercherClientValidation, {}, {}), gClients.recupereClient.bind(gClients));
 
 /**
  * Retourne le client id
  */
-router.get('/:id', validate(adresseIdValidation, {}, {}), gClient.recupereClient.bind(gClient));
+router.get('/:id', validate(adresseIdValidation, {}, {}), gClients.recupereClient.bind(gClients));
 
 /**
  * Modifie un client. Le id dans l'adresse est obligatoire. Les autres informations dans le body sont optionnelles.
  * Au moins une devrait toutefois être modifiée, sinon la requête est un peu inutile
  */
-router.put('/:id', validate(modifierClientValidation, {}, {}), gClient.modifierClient.bind(gClient));
+router.put('/:id', validate(modifierClientValidation, {}, {}), gClients.modifierClient.bind(gClients));
 
 /**
  * Efface un client. Attention, c'est permanent!
  */
-router.delete('/:id', validate(adresseIdValidation, {}, {}), gClient.effaceClient.bind(gClient));
+router.delete('/:id', validate(adresseIdValidation, {}, {}), gClients.effaceClient.bind(gClients));
 
 module.exports = router;
