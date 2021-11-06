@@ -15,7 +15,10 @@ const nouveauProduitValidation = {
     nom: Joi.string().required(),
     description: Joi.string().required(),
     prix: Joi.number().required(),
-    qte_inventaire: Joi.number().integer().positive().required()
+    qte_inventaire: Joi.number().integer().positive().required(),
+    categorie: Joi.object({
+      id: Joi.number().integer().required()
+    }).required()
   })
 };
 
@@ -28,7 +31,10 @@ const modifierProduitValidation = {
     nom: Joi.string(),
     description: Joi.string(),
     prix: Joi.number(),
-    qte_inventaire: Joi.number().integer().positive()
+    qte_inventaire: Joi.number().integer().positive(),
+    categorie: Joi.object({
+      id: Joi.number().integer().required()
+    })
   })
 };
 

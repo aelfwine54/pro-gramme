@@ -100,10 +100,15 @@ class GestionProduits {
    * @param res
    */
   ajouteProduit(req, res) {
-    // TODO verifier que la catégorie existe
-    const c = new Produit(-1, req.body.serial, req.body.nom, req.body.description, req.body.prix, parseInt(req.body.qte_inventaire), req.body.qte_inventaire);
-    this.collectionProduit.ajouterProduit(c);
-    res.send(JSON.stringify(c));
+    const id = req.body.categorie.id;
+    const cat = this.collectionCategorie.recupereCategorie(id);
+    if (cat) {
+      const c = new Produit(-1, req.body.serial, req.body.nom, req.body.description, req.body.prix, parseInt(req.body.qte_inventaire), cat);
+      this.collectionProduit.ajouterProduit(c);
+      res.send(JSON.stringify(c));
+    } else {
+      res.status(400).send(`La catégorie ${id} n'existe pas`);
+    }
   }
 
   /**
@@ -124,7 +129,16 @@ class GestionProduits {
     c.description = req.body.description;
     c.prix = req.body.prix;
     c.qte_inventaire = parseInt(req.body.qte_inventaire);
-    c.categorie = req.body.categorie; // TODO valider que ca existe
+    if (req.body.categorie) {
+      const idCat = req.body.categorie.id;
+      const cat = this.collectionCategorie.recupereCategorie(idCat);
+      if (cat) {
+        c.categorie = cat;
+      } else {
+        res.status(400).send(`La catégorie ${idCat} n'existe pas`);
+        return;
+      }
+    }
     res.send(this.collectionProduit.modifierProduit(c));
   }
 
