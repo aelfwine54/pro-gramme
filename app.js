@@ -15,15 +15,6 @@ app.use(express.static('client'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(function(err, req, res, next) {
-  if (err instanceof ValidationError) {
-    const errorMessages = err.details.map(el => el.message);
-    console.log(errorMessages);
-    return res.status(err.statusCode).json(errorMessages);
-  }
-  return res.status(500).json(err);
-});
-
 app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, '/client/index.html'));
 });
@@ -33,5 +24,19 @@ app.use('/commerces', commerces);
 app.use('/clients', clients);
 app.use('/categories', categories);
 app.use('/produits', produits);
+
+app.use(function(err, req, res, next) {
+  if (err instanceof ValidationError) {
+    const messages = [];
+    for (const cle in err.details) {
+      for (const index in err.details[cle]) {
+        messages.push(`${cle} ${err.details[cle][index].message}`);
+      }
+    }
+    console.log(messages);
+    return res.status(err.statusCode).json(messages);
+  }
+  return res.status(500).json(err);
+});
 
 app.listen(port, () => console.log(`Pro-gramme écoute au http://localhost:${port}`));
