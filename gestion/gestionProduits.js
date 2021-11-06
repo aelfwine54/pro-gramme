@@ -46,7 +46,7 @@ class GestionProduits {
    * @param res
    */
   modifierCategorie(req, res) {
-    const id = parseInt(req.params.id);
+    const id = parseInt(req.params.idCat);
     const c = this.collectionCategorie.recupereCategorie(id);
     if (!c) {
       res.status(400).send(`La catégorie avec l'id ${id} n'a pas été trouvée`);
@@ -72,7 +72,7 @@ class GestionProduits {
 
       res.send(this.collectionCategorie.rechercheCategorie(nom, description));
     } else { // sinon c'est un get avec ID ou sans contrainte
-      let id = req.params.id || -1;
+      let id = req.params.idCat || -1;
       id = parseInt(id);
       res.send(this.collectionCategorie.recupereCategorie(id));
     }
@@ -84,7 +84,7 @@ class GestionProduits {
    * @param res
    */
   effaceProduit(req, res) {
-    const id = parseInt(req.params.id);
+    const id = parseInt(req.params.idProduit);
     const c = this.collectionProduit.recupereProduit(id);
     if (!c) {
       res.status(400).send(`Le produit avec l'id ${id} n'a pas été trouvé`);
@@ -118,7 +118,7 @@ class GestionProduits {
    * @param res
    */
   modifierProduit(req, res) {
-    const id = parseInt(req.params.id);
+    const id = parseInt(req.params.idProduit);
     const c = this.collectionProduit.recupereProduit(id);
     if (!c) {
       res.status(400).send(`Le produit avec l'id ${id} n'a pas été trouvé`);
@@ -161,9 +161,29 @@ class GestionProduits {
 
       res.send(this.collectionProduit.rechercheProduit(serial, nom, description, prix, qteInventaire, categorie));
     } else { // sinon c'est un get avec ID ou sans contrainte
-      const id = parseInt(req.params.id) || -1;
+      let id = parseInt(req.params.idProduit);
+      if (!(id >= 0)) { // sans la parenthese, !id est évalué avant le >= parce que javascript
+        id = -1;
+      }
       res.send(this.collectionProduit.recupereProduit(id));
     }
+  }
+
+  /**
+   * Méthode qui donne la liste des produits pour une catégorie donnée
+   * @param req
+   * @param res
+   */
+  recupereProduitsCategorie(req, res) {
+    const id = parseInt(req.params.idCat);
+    const cat = this.collectionCategorie.recupereCategorie(id);
+
+    if (!cat) {
+      res.status(400).send(`La catégorie ${id} n'existe pas`);
+      return;
+    }
+    const liste = this.collectionProduit.rechercheProduitCategorie(cat);
+    res.send(JSON.stringify(liste));
   }
 }
 

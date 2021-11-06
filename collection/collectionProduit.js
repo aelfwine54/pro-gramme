@@ -100,12 +100,21 @@ class CollectionProduit {
         return elem.qte_inventaire === qteInventaire;
       });
     }
-    if (categorie) {
+    if (categorie && categorie.id) {
       listeLocale = listeLocale.filter(function (elem) {
-        return elem.categorie === categorie;
+        return elem.categorie.id === categorie.id;
       });
     }
     return listeLocale;
+  }
+
+  /**
+   * Méthode rapide pour rechercher les produits d'une catégorie.
+   * @param cat
+   * @returns {*[]}
+   */
+  rechercheProduitCategorie(cat) {
+    return this.rechercheProduit(null, null, null, null, null, cat);
   }
 
   /**

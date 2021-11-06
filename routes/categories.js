@@ -5,7 +5,7 @@ const gProduits = require('../util/gestionnaires').gProduits;
 
 const adresseIdValidation = {
   params: Joi.object({
-    id: Joi.number().integer().required()
+    idCat: Joi.number().integer().required()
   })
 };
 
@@ -18,7 +18,7 @@ const nouvelleCategorieValidation = {
 
 const modifierCategorieValidation = {
   params: Joi.object({
-    id: Joi.number().integer().required()
+    idCat: Joi.number().integer().required()
   }),
   body: Joi.object({
     nom: Joi.string(),
@@ -30,6 +30,13 @@ const rechercherCategorieValidation = {
   query: Joi.object({
     nom: Joi.string(),
     description: Joi.string()
+  })
+};
+
+const produitCatValidation = {
+  params: Joi.object({
+    idCat: Joi.number().integer().required(),
+    idProduit: Joi.number().integer().required()
   })
 };
 
@@ -50,17 +57,27 @@ router.get('/', validate(rechercherCategorieValidation, {}, {}), gProduits.recup
 /**
  * Retourne la categorie ayant l'id id
  */
-router.get('/:id', validate(adresseIdValidation, {}, {}), gProduits.recupereCategorie.bind(gProduits));
+router.get('/:idCat', validate(adresseIdValidation, {}, {}), gProduits.recupereCategorie.bind(gProduits));
 
 /**
  * Modifie une categorie. Le id dans l'adresse est obligatoire. Les autres informations dans le body sont optionnelles.
  * Au moins une devrait toutefois être modifiée, sinon la requête est un peu inutile
  */
-router.put('/:id', validate(modifierCategorieValidation, {}, {}), gProduits.modifierCategorie.bind(gProduits));
+router.put('/:idCat', validate(modifierCategorieValidation, {}, {}), gProduits.modifierCategorie.bind(gProduits));
 
 /**
  * Efface une categorie. Attention, c'est permanent!
  */
-router.delete('/:id', validate(adresseIdValidation, {}, {}), gProduits.effaceCategorie.bind(gProduits));
+router.delete('/:idCat', validate(adresseIdValidation, {}, {}), gProduits.effaceCategorie.bind(gProduits));
+
+/**
+ * Récupère la liste des produits pour la catégorie :id
+ */
+router.get('/:idCat/produits', validate(adresseIdValidation, {}, {}), gProduits.recupereProduitsCategorie.bind(gProduits));
+
+/**
+ * Récupère les informations sur un produit d'une catégorie
+ */
+router.get('/:idCat/produits/:idProduit', validate(produitCatValidation, {}, {}), gProduits.recupereProduit.bind(gProduits));
 
 module.exports = router;
