@@ -52,6 +52,22 @@ class CollectionClient {
   }
 
   /**
+   * Fonction interne pour trouver le prochain ID pour un item dans le panier d'un client. Si la liste de produit est vide l'id est zéro,
+   * sinon c'est le dernier +1
+   * @param idClient
+   * @returns {number} prochain ID à utiliser
+   */
+  recupereProchainIDItem(idClient) {
+    let id = 0;
+    const index = this.getClientIndex(idClient);
+    if (this.liste_clients[index].panier.items.length > 0) {
+      id = this.liste_clients[index].panier.items.slice(-1)[0].id;
+      id += 1;
+    }
+    return id;
+  }
+
+  /**
      * Retourne les clients
      * @param id Optionnel, pour avoir un seul client au lieu de toute la liste
      * @returns {*[]|*}
@@ -150,7 +166,7 @@ class CollectionClient {
    *                      Chacun des autres champs peut être nul s'il n'est pas modifié
    */
   modifierClient(nouveauClient) {
-    const objIndex = this.liste_clients.findIndex(obj => obj.id === nouveauClient.id);
+    const objIndex = this.getClientIndex(nouveauClient.id);
     if (objIndex > -1) { // S'il n'est pas trouvé l'index sera -1
       if (nouveauClient.prenom) {
         this.liste_clients[objIndex].prenom = nouveauClient.prenom;
@@ -170,6 +186,88 @@ class CollectionClient {
     }
     this.sauvegarder();
     return this.liste_clients[objIndex];
+  }
+
+  /**
+   * Retourne le panier d'un client, ou un item de celui-ci
+   * @param idClient
+   * @param idItem
+   * @returns {*}
+   */
+  recuperePanier (idClient, idItem) {
+    const clientIndex = this.getClientIndex(idClient);
+    if (idItem >= 0) {
+      const itemIndex = this.liste_clients[clientIndex].panier.items.findIndex(obj => obj.id === idItem);
+      return this.liste_clients[clientIndex].panier.items[itemIndex];
+    }
+    return this.liste_clients[clientIndex].panier;
+  }
+
+  /**
+   * Ajoute un item au panier. Provoque la mise à jour de la valeur du panier.
+   * @param idClient
+   * @param item
+   */
+  ajoutePanier(idClient, item) {
+    const clientIndex = this.getClientIndex(idClient);
+    item.id = this.recupereProchainIDItem(idClient);
+    this.liste_clients[clientIndex].panier.items.push(item);
+    this.calculePanier(idClient);
+    return this.liste_clients[clientIndex].panier;
+  }
+
+  /**
+   * Retourne l'index du client idClient dans la liste interne.
+   * @param idClient
+   * @returns {number}
+   */
+  getClientIndex(idClient) {
+    return this.liste_clients.findIndex(obj => obj.id === idClient);
+  }
+
+  /**
+   * Calcule la valeur du panier d'un client
+   * @param idClient
+   */
+  calculePanier(idClient) {
+    const indexClient = this.getClientIndex(idClient);
+    const client = this.liste_clients[indexClient];
+    client.panier.valeur = client.panier.items.reduce(function (a, b) {
+      return a + (b.quantite * b.prix);
+    }, 0);
+    this.sauvegarder();
+  }
+
+  /**
+   * Retrouve un produit dans un panier selon l'id du produit
+   * @param idClient
+   * @param idProduit
+   * @returns {*}
+   */
+  recupereProduitDansPanier(idClient, idProduit) {
+    const indexClient = this.getClientIndex(idClient);
+    const panier = this.liste_clients[indexClient].panier;
+    const itemIndex = panier.items.findIndex(obj => obj.idProduit === idProduit);
+
+    return panier.items[itemIndex];
+  }
+
+  /**
+   * Modifie un produit dans le panier d'un client. La seule modification possible est la quantité.
+   * Pour retirer, mettre une quantité négative. Pour ajouter, une quantité positive.
+   * @param idClient
+   * @param idItem
+   * @param modification
+   * @returns {*}
+   */
+  modifierPanier(idClient, idItem, modification) {
+    const indexClient = this.getClientIndex(idClient);
+    const panier = this.liste_clients[indexClient].panier;
+    const itemIndex = panier.items.findIndex(obj => obj.id === idItem);
+    this.liste_clients[indexClient].panier.items[itemIndex].quantite += modification;
+
+    this.calculePanier(idClient);
+    return panier;
   }
 }
 

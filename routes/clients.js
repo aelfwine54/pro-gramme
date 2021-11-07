@@ -6,7 +6,14 @@ const router = express.Router();
 
 const adresseIdValidation = {
   params: Joi.object({
-    id: Joi.number().integer().required()
+    idClient: Joi.number().integer().required()
+  })
+};
+
+const panierItemIdValidation = {
+  params: Joi.object({
+    idClient: Joi.number().integer().required(),
+    idItem: Joi.number().integer().required()
   })
 };
 
@@ -22,7 +29,7 @@ const nouveauClientValidation = {
 
 const modifierClientValidation = {
   params: Joi.object({
-    id: Joi.number().integer().required()
+    idClient: Joi.number().integer().required()
   }),
   body: Joi.object({
     prenom: Joi.string(),
@@ -43,6 +50,26 @@ const rechercherClientValidation = {
   })
 };
 
+const nouveauItemPanierValidation = {
+  params: Joi.object({
+    idClient: Joi.number().integer().required()
+  }),
+  body: Joi.object({
+    idProduit: Joi.number().integer().required(),
+    quantite: Joi.number().integer().positive().required()
+  })
+};
+
+const modifierPanierValidation = {
+  params: Joi.object({
+    idClient: Joi.number().integer().required(),
+    idItem: Joi.number().integer().required()
+  }),
+  body: Joi.object({
+    quantite: Joi.number().integer().required()
+  })
+};
+
 /**
  * Ajoute un nouveau client. S'utilise avec une requête de type POST.
  * Il faut passer dans le corps de la requête une description complète sous forme de JSON.
@@ -58,19 +85,40 @@ router.post('/', validate(nouveauClientValidation), gClients.ajouteClient.bind(g
 router.get('/', validate(rechercherClientValidation, {}, {}), gClients.recupereClient.bind(gClients));
 
 /**
- * Retourne le client id
+ * Retourne le client ayant l'id :idClient
  */
-router.get('/:id', validate(adresseIdValidation, {}, {}), gClients.recupereClient.bind(gClients));
+router.get('/:idClient', validate(adresseIdValidation, {}, {}), gClients.recupereClient.bind(gClients));
 
 /**
  * Modifie un client. Le id dans l'adresse est obligatoire. Les autres informations dans le body sont optionnelles.
  * Au moins une devrait toutefois être modifiée, sinon la requête est un peu inutile
  */
-router.put('/:id', validate(modifierClientValidation, {}, {}), gClients.modifierClient.bind(gClients));
+router.put('/:idClient', validate(modifierClientValidation, {}, {}), gClients.modifierClient.bind(gClients));
 
 /**
  * Efface un client. Attention, c'est permanent!
  */
-router.delete('/:id', validate(adresseIdValidation, {}, {}), gClients.effaceClient.bind(gClients));
+router.delete('/:idClient', validate(adresseIdValidation, {}, {}), gClients.effaceClient.bind(gClients));
+
+/**
+ * Récupère le panier d'un client.
+ */
+router.get('/:idClient/panier', validate(adresseIdValidation, {}, {}), gClients.recuperePanier.bind(gClients));
+
+/**
+ * Récupère l'item :idItem du panier du client :idClient.
+ */
+router.get('/:idClient/panier/:idItem', validate(panierItemIdValidation, {}, {}), gClients.recuperePanier.bind(gClients));
+
+/**
+ * Ajoute un item au panier d'un client.
+ */
+router.post('/:idClient/panier', validate(nouveauItemPanierValidation, {}, {}), gClients.ajoutePanier.bind(gClients));
+
+/**
+ * Modifie un item dans un panier. On peut seulement modifier la quantité. Une quantité positive augmente,
+ * une quantité négative diminue. (ancienneQté + modification)
+ */
+router.put('/:idClient/panier/:idItem', validate(modifierPanierValidation, {}, {}), gClients.modifiePanier.bind(gClients));
 
 module.exports = router;

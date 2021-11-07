@@ -6,7 +6,10 @@
         "age": 38,
         "adresse": "1029 rue Trembley, J1H 2E5",
         "pays": "Canada",
-        "panier": []
+        "panier": {
+            "valeur": 0,
+            "items": []
+        }
     },
     {
         "id": 1,
@@ -15,7 +18,19 @@
         "age": 38,
         "adresse": "1029 rue Trembley, J1H 2E5",
         "pays": "Canada",
-        "panier": []
+        "panier": {
+            "valeur": 1436.0800000000002,
+            "items": [
+                {
+                    "id": 0,
+                    "idProduit": 0,
+                    "nomProduit": "Banane",
+                    "descriptionProduit": "Un poirier est une espèce d'arbre qui offre de bons suppléments",
+                    "prix": 24.76,
+                    "quantite": 58
+                }
+            ]
+        }
     },
     {
         "id": 2,
@@ -24,7 +39,10 @@
         "age": 38,
         "adresse": "1029 rue Trembley, J1H 2E5",
         "pays": "Canada",
-        "panier": []
+        "panier": {
+            "valeur": 0,
+            "items": []
+        }
     },
     {
         "id": 3,
@@ -33,7 +51,10 @@
         "age": 38,
         "adresse": "1029 rue Trembley, J1H 2E5",
         "pays": "Canada",
-        "panier": []
+        "panier": {
+            "valeur": 0,
+            "items": []
+        }
     },
     {
         "id": 4,
@@ -42,7 +63,10 @@
         "age": 38,
         "adresse": "1029 rue Trembley, J1H 2E5",
         "pays": "Canada",
-        "panier": []
+        "panier": {
+            "valeur": 0,
+            "items": []
+        }
     },
     {
         "id": 5,
@@ -51,6 +75,9 @@
         "age": 38,
         "adresse": "1029 rue Trembley, J1H 2E5",
         "pays": "Canada",
-        "panier": []
+        "panier": {
+            "valeur": 0,
+            "items": []
+        }
     }
 ]

@@ -1,15 +1,10 @@
 const Produit = require('../data/Produit');
 const Categorie = require('../data/Categorie');
 
-const CollectionCategorie = require('../collection/collectionCategorie');
-const CollectionProduit = require('../collection/collectionProduit');
-
 class GestionProduits {
-  constructor() {
-    this.collectionCategorie = new CollectionCategorie();
-    this.collectionProduit = new CollectionProduit();
-    this.collectionCategorie.chargerCategorie();
-    this.collectionProduit.chargerProduit();
+  constructor(collectionProduit, collectionCategorie) {
+    this.collectionCategorie = collectionCategorie;
+    this.collectionProduit = collectionProduit;
   }
 
   /**

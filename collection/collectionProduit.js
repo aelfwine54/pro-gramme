@@ -164,7 +164,7 @@ class CollectionProduit {
    *                          Chacun des autres champs peut être nul s'il n'est pas modifié
    */
   modifierProduit(nouveauProduit) {
-    const objIndex = this.liste_produits.findIndex(obj => obj.id === nouveauProduit.id);
+    const objIndex = this.getObjIndex(nouveauProduit.id);
     if (objIndex > -1) { // S'il n'est pas trouvé l'index sera -1
       if (nouveauProduit.serial) {
         this.liste_produits[objIndex].serial = nouveauProduit.serial;
@@ -187,6 +187,21 @@ class CollectionProduit {
     }
     this.sauvegarder();
     return this.liste_produits[objIndex];
+  }
+
+  getObjIndex(idProduit) {
+    return this.liste_produits.findIndex(obj => obj.id === idProduit);
+  }
+
+  /**
+   * Ajoute la quantité à l'inventaire. Pour un retrait, mettre un nombre négatif
+   * @param produit
+   * @param quantite
+   */
+  ajusterQuantite(produit, quantite) {
+    const index = this.getObjIndex(produit.id);
+    this.liste_produits[index].qte_inventaire += quantite;
+    this.sauvegarder();
   }
 }
 
