@@ -166,6 +166,31 @@ class GestionClient {
       res.status(400).send(`Le client avec l'id ${idClient} n'a pas été trouvé`);
     }
   }
+
+  retirerPanier(req, res) {
+    const idClient = parseInt(req.params.idClient);
+    if (this.collectionClient.rechercheClient(idClient)) {
+      const idItem = parseInt(req.params.idItem);
+
+      const item = this.collectionClient.recuperePanier(idClient, idItem);
+      if (!item) {
+        res.status(400).send(`L'item avec l'id ${idItem} n'a pas été trouvé dans le panier.`);
+        return;
+      }
+      const produit = this.collectionProduit.recupereProduit(item.idProduit);
+      if (!produit) {
+        res.status(400).send(`Le produit ${produit.nom} ne semble plus exister. Comment est-ce possible?`);
+        return;
+      }
+      this.collectionProduit.ajusterQuantite(produit, item.quantite); // Si on fait un plus dans la panier, il faut faire un moins sur l'inventaire.
+
+      const panier = this.collectionClient.retirePanier(idClient, item);
+
+      res.send(panier);
+    } else {
+      res.status(400).send(`Le client avec l'id ${idClient} n'a pas été trouvé`);
+    }
+  }
 }
 
 module.exports = GestionClient;

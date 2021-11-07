@@ -269,6 +269,15 @@ class CollectionClient {
     this.calculePanier(idClient);
     return panier;
   }
+
+  retirePanier(idClient, item) {
+    const indexClient = this.getClientIndex(idClient);
+    const panier = this.liste_clients[indexClient].panier;
+    const itemIndex = panier.items.findIndex(obj => obj.id === item.id);
+    panier.items.splice(itemIndex, 1);
+    this.calculePanier(idClient);
+    return panier;
+  }
 }
 
 module.exports = CollectionClient;

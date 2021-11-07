@@ -121,4 +121,9 @@ router.post('/:idClient/panier', validate(nouveauItemPanierValidation, {}, {}), 
  */
 router.put('/:idClient/panier/:idItem', validate(modifierPanierValidation, {}, {}), gClients.modifiePanier.bind(gClients));
 
+/**
+ * Retire un item d'un panier.
+ */
+router.delete('/:idClient/panier/:idItem', validate(panierItemIdValidation, {}, {}), gClients.retirerPanier.bind(gClients));
+
 module.exports = router;
