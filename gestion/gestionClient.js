@@ -39,9 +39,10 @@ class GestionClient {
       res.status(400).send('Il y a déjà un client avec cette adresse');
       return;
     }
+    const that = this;
     bCrypt.hash(req.body.mdp, saltRounds).then(function(hash) { // La doc dit que c'est plus rapide async
       const c = new Client(-1, req.body.prenom, req.body.nom, parseInt(req.body.age), req.body.adresse, req.body.pays, new Panier(0, []), req.body.courriel, hash);
-      this.collectionClient.ajouterClient(c);
+      that.collectionClient.ajouterClient(c);
       res.send(c.public());
     });
   }

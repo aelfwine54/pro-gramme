@@ -43,7 +43,7 @@ class CollectionClient {
    * @returns {number} prochain ID à utiliser
    */
   recupereProchainID() {
-    let id = 0;
+    let id = 1; // l'id 0 est réservé pour l'admin
     if (this.liste_clients.length > 0) {
       id = this.liste_clients.slice(-1)[0].id;
       id += 1;

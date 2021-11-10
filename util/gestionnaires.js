@@ -1,6 +1,7 @@
 
 const GestionClient = require('../gestion/gestionClient');
 const GestionProduits = require('../gestion/gestionProduits');
+const GestionConnexion = require('../gestion/gestionConnexion');
 
 const CollectionProduit = require('../collection/collectionProduit');
 const CollectionClient = require('../collection/collectionClient');
@@ -17,7 +18,8 @@ cCategorie.chargerCategorie();
 
 const gestionnaires = {
   gClients: new GestionClient(cClient, cProduit),
-  gProduits: new GestionProduits(cProduit, cCategorie)
+  gProduits: new GestionProduits(cProduit, cCategorie),
+  gConnexion: new GestionConnexion(cClient)
 };
 
 module.exports = gestionnaires;

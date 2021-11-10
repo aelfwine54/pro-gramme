@@ -10,6 +10,7 @@ const commerces = require('./routes/commerces');
 const clients = require('./routes/clients');
 const categories = require('./routes/categories');
 const produits = require('./routes/produits');
+const connexion = require('./routes/connexion');
 
 app.use(express.static('client'));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -24,6 +25,7 @@ app.use('/commerces', commerces);
 app.use('/clients', clients);
 app.use('/categories', categories);
 app.use('/produits', produits);
+app.use('/connexion', connexion);
 
 app.use(function(err, req, res, next) {
   if (err instanceof ValidationError) {

@@ -1,5 +1,6 @@
 const express = require('express');
 const { validate, Joi } = require('express-validation');
+const auth = require('./../middleware/auth');
 const router = express.Router();
 const gProduits = require('../util/gestionnaires').gProduits;
 
@@ -44,7 +45,7 @@ const produitCatValidation = {
  * Ajoute une nouvelle catégorie. S'utilise avec une requête de type POST.
  * Il faut passer dans le corps de la requête une description complète sous forme de JSON.
  */
-router.post('/', validate(nouvelleCategorieValidation), gProduits.ajouteCategorie.bind(gProduits));
+router.post('/', validate(nouvelleCategorieValidation), auth.admin, gProduits.ajouteCategorie.bind(gProduits));
 
 /**
  * Retourne l'ensemble des catégories. On peut filtrer les résultats.
@@ -63,12 +64,12 @@ router.get('/:idCat', validate(adresseIdValidation, {}, {}), gProduits.recupereC
  * Modifie une categorie. Le id dans l'adresse est obligatoire. Les autres informations dans le body sont optionnelles.
  * Au moins une devrait toutefois être modifiée, sinon la requête est un peu inutile
  */
-router.put('/:idCat', validate(modifierCategorieValidation, {}, {}), gProduits.modifierCategorie.bind(gProduits));
+router.put('/:idCat', validate(modifierCategorieValidation, {}, {}), auth.admin, gProduits.modifierCategorie.bind(gProduits));
 
 /**
  * Efface une categorie. Attention, c'est permanent!
  */
-router.delete('/:idCat', validate(adresseIdValidation, {}, {}), gProduits.effaceCategorie.bind(gProduits));
+router.delete('/:idCat', validate(adresseIdValidation, {}, {}), auth.admin, gProduits.effaceCategorie.bind(gProduits));
 
 /**
  * Récupère la liste des produits pour la catégorie :id
