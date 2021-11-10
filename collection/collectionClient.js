@@ -28,7 +28,7 @@ class CollectionClient {
           const liste = JSON.parse(data);
           for (const elem in liste) {
             const c = liste[elem];
-            this.liste_clients.push(new Client(c.id, c.prenom, c.nom, c.age, c.adresse, c.pays, c.panier));
+            this.liste_clients.push(new Client(c.id, c.prenom, c.nom, c.age, c.adresse, c.pays, c.panier, c.courriel, c.mdp));
           }
         }
       });
@@ -78,6 +78,18 @@ class CollectionClient {
     } else {
       return this.liste_clients;
     }
+  }
+
+  /**
+   * Retrouve un client en utilisant son adresse courriel.
+   * @param courriel
+   * @returns {null|*} null si le client n'est pas trouvé, le client sinon
+   */
+  recupereClientParCourriel(courriel) {
+    if (courriel) {
+      return this.liste_clients.find(x => x.courriel === courriel);
+    }
+    return null;
   }
 
   /**

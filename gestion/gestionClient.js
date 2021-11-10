@@ -2,6 +2,9 @@ const Client = require('../data/Client');
 const ItemPanier = require('../data/ItemPanier');
 const Panier = require('../data/Panier');
 
+const bCrypt = require('bcrypt');
+const saltRounds = 8;
+
 class GestionClient {
   constructor(collectionClient, collectionProduit) {
     this.collectionClient = collectionClient;
@@ -20,7 +23,7 @@ class GestionClient {
       res.status(400).send(`Le client avec l'id ${id} n'a pas été trouvé`);
     } else {
       this.collectionClient.effacerClient(c);
-      res.status(200).send();
+      res.status(200).send(c.public());
     }
   }
 
@@ -31,9 +34,16 @@ class GestionClient {
    */
   ajouteClient(req, res) {
     // Il faudrait vérifier que la pays est valide et que l'adresse existe. Une autre fois peut-être
-    const c = new Client(-1, req.body.prenom, req.body.nom, parseInt(req.body.age), req.body.adresse, req.body.pays, new Panier(0, []));
-    this.collectionClient.ajouterClient(c);
-    res.send(JSON.stringify(c));
+    const duplicata = this.collectionClient.recupereClientParCourriel(req.body.courriel);
+    if (duplicata) {
+      res.status(400).send('Il y a déjà un client avec cette adresse');
+      return;
+    }
+    bCrypt.hash(req.body.mdp, saltRounds).then(function(hash) { // La doc dit que c'est plus rapide async
+      const c = new Client(-1, req.body.prenom, req.body.nom, parseInt(req.body.age), req.body.adresse, req.body.pays, new Panier(0, []), req.body.courriel, hash);
+      this.collectionClient.ajouterClient(c);
+      res.send(c.public());
+    });
   }
 
   /**
@@ -54,7 +64,7 @@ class GestionClient {
     c.age = parseInt(req.body.age);
     c.adresse = req.body.adresse;
     c.pays = req.body.pays;
-    res.send(this.collectionClient.modifierClient(c));
+    res.send(this.collectionClient.modifierClient(c).public());
   }
 
   /**
@@ -79,7 +89,16 @@ class GestionClient {
       if (!(idClient >= 0)) { // sans la parenthese, !idClient est évalué avant le >= parce que javascript
         idClient = -1;
       }
-      res.send(this.collectionClient.recupereClient(idClient));
+      const c = this.collectionClient.recupereClient(idClient);
+      let retour = [];
+      if (c instanceof Array) {
+        for (const index in c) {
+          retour.push(c[index].public());
+        }
+      } else {
+        retour = c.public();
+      }
+      res.send(retour);
     }
   }
 

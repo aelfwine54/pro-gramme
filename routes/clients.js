@@ -23,7 +23,9 @@ const nouveauClientValidation = {
     nom: Joi.string().required(),
     age: Joi.number().integer().positive().required(),
     adresse: Joi.string().required(),
-    pays: Joi.string().required()
+    pays: Joi.string().required(),
+    courriel: Joi.string().email().required(),
+    mdp: Joi.string().required()
   })
 };
 
