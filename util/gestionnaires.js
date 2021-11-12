@@ -25,7 +25,7 @@ const gestionnaires = {
   gClients: new GestionClient(cClient, cProduit),
   gProduits: new GestionProduits(cProduit, cCategorie),
   gConnexion: new GestionConnexion(cClient),
-  cVentes: new GestionVentes(cClient, cVentes, cProduit)
+  gVentes: new GestionVentes(cClient, cVentes, cProduit)
 };
 
 module.exports = gestionnaires;
