@@ -1,6 +1,7 @@
 const fs = require('fs');
 
 const Client = require('../data/Client');
+const Panier = require('../data/Panier');
 const path = require('path');
 
 /**
@@ -28,7 +29,7 @@ class CollectionClient {
           const liste = JSON.parse(data);
           for (const elem in liste) {
             const c = liste[elem];
-            this.liste_clients.push(new Client(c.id, c.prenom, c.nom, c.age, c.adresse, c.pays, c.panier, c.courriel, c.mdp));
+            this.liste_clients.push(new Client(c.id, c.prenom, c.nom, c.age, c.adresse, c.pays, c.panier, c.courriel, c.mdp, c.historique));
           }
         }
       });
@@ -282,6 +283,12 @@ class CollectionClient {
     return panier;
   }
 
+  /**
+   * Retire un produit du panier
+   * @param idClient
+   * @param item
+   * @returns {*}
+   */
   retirePanier(idClient, item) {
     const indexClient = this.getClientIndex(idClient);
     const panier = this.liste_clients[indexClient].panier;
@@ -289,6 +296,28 @@ class CollectionClient {
     panier.items.splice(itemIndex, 1);
     this.calculePanier(idClient);
     return panier;
+  }
+
+  /**
+   * Converti le panier en vente. Ajoute la vente dans l'historique et efface le panier
+   * @param client
+   * @param vente
+   */
+  acheterPanier(client, vente) {
+    const indexClient = this.getClientIndex(client.id);
+    this.liste_clients[indexClient].historique.push(vente);
+    this.liste_clients[indexClient].panier = new Panier(0, []);
+  }
+
+  /**
+   * Modifie le status d'un élément de l'historique
+   * @param vente
+   * @param status
+   */
+  modifierStatusHistorique(vente, status) {
+    const indexClient = this.getClientIndex(vente.idClient);
+    const indexVente = this.liste_clients[indexClient].historique.findIndex(obj => obj.id === vente.id);
+    this.liste_clients[indexClient].historique[indexVente].status = status;
   }
 }
 

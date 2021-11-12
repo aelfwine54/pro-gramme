@@ -11,6 +11,8 @@ const clients = require('./routes/clients');
 const categories = require('./routes/categories');
 const produits = require('./routes/produits');
 const connexion = require('./routes/connexion');
+const ventes = require('./routes/ventes');
+const statusCommande = require('./routes/statusCommande');
 
 app.use(express.static('client'));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -26,6 +28,8 @@ app.use('/clients', clients);
 app.use('/categories', categories);
 app.use('/produits', produits);
 app.use('/connexion', connexion);
+app.use('/ventes', ventes);
+app.use('/statusCommande', statusCommande);
 
 app.use(function(err, req, res, next) {
   if (err instanceof ValidationError) {

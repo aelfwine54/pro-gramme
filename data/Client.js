@@ -1,5 +1,5 @@
 class Client {
-  constructor(id, prenom, nom, age, adresse, pays, panier, courriel, mdp) {
+  constructor(id, prenom, nom, age, adresse, pays, panier, courriel, mdp, historique) {
     this.id = id;
     this.prenom = prenom;
     this.nom = nom;
@@ -11,6 +11,7 @@ class Client {
     this.mdp = mdp;
 
     this.panier = panier;
+    this.historique = historique;
   }
 
   public() {

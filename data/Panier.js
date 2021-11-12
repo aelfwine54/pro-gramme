@@ -1,7 +1,7 @@
 class Panier {
   constructor (valeur, items) {
     this.valeur = valeur;
-    this.items = items;
+    this.items = items; // Est une liste de ItemPanier
   }
 }
 
