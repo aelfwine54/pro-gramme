@@ -12,10 +12,17 @@ router.get('/', function(req, res) {
 });
 
 /**
- * Récupère le commerce ayant l'id :id. S'utilise comme /commerces/3
+ * Récupère le commerce local ayant l'id :id. S'utilise comme /commerces/local/3
  */
-router.get('/:id', function(req, res) {
-  res.send(commerces[req.params.id]);
+router.get('/local/:id', function(req, res) {
+  res.send(commerces.commerces_locaux[req.params.id]);
+});
+
+/**
+ * Récupère le commerce international ayant l'id :id. S'utilise comme /commerces/international/3
+ */
+router.get('/international/:id', function(req, res) {
+  res.send(commerces.commerces_internationaux[req.params.id]);
 });
 
 module.exports = router;
