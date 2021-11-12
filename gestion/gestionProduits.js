@@ -85,7 +85,7 @@ class GestionProduits {
       res.status(400).send(`Le produit avec l'id ${id} n'a pas été trouvé`);
     } else {
       this.collectionProduit.effacerProduit(c);
-      res.status(200).send();
+      res.status(200).send(c);
     }
   }
 
@@ -100,7 +100,7 @@ class GestionProduits {
     if (cat) {
       const c = new Produit(-1, req.body.serial, req.body.nom, req.body.description, req.body.prix, parseInt(req.body.qte_inventaire), cat);
       this.collectionProduit.ajouterProduit(c);
-      res.send(JSON.stringify(c));
+      res.send(c);
     } else {
       res.status(400).send(`La catégorie ${id} n'existe pas`);
     }
