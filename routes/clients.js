@@ -90,43 +90,43 @@ router.get('/', validate(rechercherClientValidation, {}, {}), auth.admin, gClien
 /**
  * Retourne le client ayant l'id :idClient
  */
-router.get('/:idClient', validate(adresseIdValidation, {}, {}), auth.local, gClients.recupereClient.bind(gClients));
+router.get('/:idClient', validate(adresseIdValidation, {}, {}), auth.localParam, gClients.recupereClient.bind(gClients));
 
 /**
  * Modifie un client. Le id dans l'adresse est obligatoire. Les autres informations dans le body sont optionnelles.
  * Au moins une devrait toutefois être modifiée, sinon la requête est un peu inutile
  */
-router.put('/:idClient', validate(modifierClientValidation, {}, {}), auth.local, gClients.modifierClient.bind(gClients));
+router.put('/:idClient', validate(modifierClientValidation, {}, {}), auth.localParam, gClients.modifierClient.bind(gClients));
 
 /**
  * Efface un client. Attention, c'est permanent!
  */
-router.delete('/:idClient', validate(adresseIdValidation, {}, {}), auth.local, gClients.effaceClient.bind(gClients));
+router.delete('/:idClient', validate(adresseIdValidation, {}, {}), auth.localParam, gClients.effaceClient.bind(gClients));
 
 /**
  * Récupère le panier d'un client.
  */
-router.get('/:idClient/panier', validate(adresseIdValidation, {}, {}), auth.local, gClients.recuperePanier.bind(gClients));
+router.get('/:idClient/panier', validate(adresseIdValidation, {}, {}), auth.localParam, gClients.recuperePanier.bind(gClients));
 
 /**
  * Récupère l'item :idItem du panier du client :idClient.
  */
-router.get('/:idClient/panier/:idItem', validate(panierItemIdValidation, {}, {}), auth.local, gClients.recuperePanier.bind(gClients));
+router.get('/:idClient/panier/:idItem', validate(panierItemIdValidation, {}, {}), auth.localParam, gClients.recuperePanier.bind(gClients));
 
 /**
  * Ajoute un item au panier d'un client.
  */
-router.post('/:idClient/panier', validate(nouveauItemPanierValidation, {}, {}), auth.local, gClients.ajoutePanier.bind(gClients));
+router.post('/:idClient/panier', validate(nouveauItemPanierValidation, {}, {}), auth.localParam, gClients.ajoutePanier.bind(gClients));
 
 /**
  * Modifie un item dans un panier. On peut seulement modifier la quantité. Une quantité positive augmente,
  * une quantité négative diminue. (ancienneQté + modification)
  */
-router.put('/:idClient/panier/:idItem', validate(modifierPanierValidation, {}, {}), auth.local, gClients.modifiePanier.bind(gClients));
+router.put('/:idClient/panier/:idItem', validate(modifierPanierValidation, {}, {}), auth.localParam, gClients.modifiePanier.bind(gClients));
 
 /**
  * Retire un item d'un panier.
  */
-router.delete('/:idClient/panier/:idItem', validate(panierItemIdValidation, {}, {}), auth.local, gClients.retirerPanier.bind(gClients));
+router.delete('/:idClient/panier/:idItem', validate(panierItemIdValidation, {}, {}), auth.localParam, gClients.retirerPanier.bind(gClients));
 
 module.exports = router;
