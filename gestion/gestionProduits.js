@@ -150,7 +150,7 @@ class GestionProduits {
       const serial = req.query.serial;
       const nom = req.query.nom;
       const description = req.query.description;
-      const prix = req.query.prix;
+      const prix = parseFloat(req.query.prix);
       const qteInventaire = parseInt(req.query.qte_inventaire);
       const categorie = req.query.categorie;
 
