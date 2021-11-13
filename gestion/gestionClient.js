@@ -60,12 +60,14 @@ class GestionClient {
       return;
     }
     // Il faudrait vérifier que la pays est valide et que l'adresse existe. Une autre fois peut-être
-    c.prenom = req.body.prenom;
-    c.nom = req.body.nom;
-    c.age = parseInt(req.body.age);
-    c.adresse = req.body.adresse;
-    c.pays = req.body.pays;
-    res.send(this.collectionClient.modifierClient(c).public());
+    const cl = {};
+    cl.id = c.id;
+    cl.prenom = req.body.prenom;
+    cl.nom = req.body.nom;
+    cl.age = parseInt(req.body.age);
+    cl.adresse = req.body.adresse;
+    cl.pays = req.body.pays;
+    res.send(this.collectionClient.modifierClient(cl).public());
   }
 
   /**
