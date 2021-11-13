@@ -72,7 +72,7 @@ class CollectionVente {
    */
   rechercheVentes(idClient, status, depuis) {
     let listeLocale = [...this.liste_vente];
-    if (idClient) {
+    if (idClient >= 0) {
       listeLocale = listeLocale.filter(function (elem) {
         return elem.idClient === idClient;
       });

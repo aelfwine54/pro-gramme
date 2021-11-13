@@ -93,9 +93,9 @@ class GestionVentes {
     if (Object.keys(req.query).length > 0) {
       const status = req.query.status;
       const depuis = req.query.depuis;
-      const idClient = req.query.client;
+      const idClient = parseInt(req.query.client);
 
-      res.send(this.collectionVente.rechercheVentes(idClient, status, new Date(depuis)));
+      res.send(this.collectionVente.rechercheVentes(idClient, status, Date.parse(depuis)));
     } else { // sinon c'est un get avec ID ou sans contrainte
       let id = parseInt(req.params.idVente);
       if (!(id >= 0)) { // sans la parenthese, !id est évalué avant le >= parce que javascript
