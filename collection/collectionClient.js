@@ -307,6 +307,7 @@ class CollectionClient {
     const indexClient = this.getClientIndex(client.id);
     this.liste_clients[indexClient].historique.push(vente);
     this.liste_clients[indexClient].panier = new Panier(0, []);
+    this.sauvegarder();
   }
 
   /**
@@ -318,6 +319,7 @@ class CollectionClient {
     const indexClient = this.getClientIndex(vente.idClient);
     const indexVente = this.liste_clients[indexClient].historique.findIndex(obj => obj.id === vente.id);
     this.liste_clients[indexClient].historique[indexVente].status = status;
+    this.sauvegarder();
   }
 }
 

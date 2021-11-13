@@ -43,10 +43,14 @@ class GestionVentes {
     const idClient = req.body.idClient;
     const client = this.collectionClient.recupereClient(idClient);
     if (client) {
-      const vente = new Vente(-1, idClient, client.panier.valeur, client.panier.items, this.statusPossibles.recue);
-      this.collectionVente.ajouterVente(vente);
-      this.collectionClient.acheterPanier(client, vente);
-      res.send(vente);
+      if (client.panier.valeur > 0) {
+        const vente = new Vente(-1, idClient, client.panier.valeur, client.panier.items, this.statusPossibles.recue, new Date());
+        this.collectionClient.acheterPanier(client, vente);
+        this.collectionVente.ajouterVente(vente);
+        res.send(vente);
+      } else {
+        res.status(400).send(`Le client ${idClient} n'a pas de panier actif`);
+      }
     } else {
       res.status(400).send(`Le client ${idClient} n'a pas été trouvé`);
     }
