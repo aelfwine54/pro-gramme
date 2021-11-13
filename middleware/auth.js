@@ -26,9 +26,9 @@ class Auth {
    * @param next
    */
   static localParam(req, res, next) {
-    const id = req.params.idClient;
-    if (id) {
-      this._local(req, res, next, id);
+    const id = parseInt(req.params.idClient);
+    if (id >= 0) {
+      Auth._local(req, res, next, id);
     } else {
       res.status(401).send('Champ idClient manquant dans le chemin de la requête');
     }
@@ -41,9 +41,9 @@ class Auth {
    * @param next
    */
   static localBody(req, res, next) {
-    const id = req.body.idClient;
-    if (id) {
-      this._local(req, res, next, id);
+    const id = parseInt(req.body.idClient);
+    if (id >= 0) {
+      Auth._local(req, res, next, id);
     } else {
       res.status(401).send('Champ idClient manquant dans le corps de la requête');
     }
@@ -62,15 +62,13 @@ class Auth {
       const decodedToken = jwt.verify(token, 'Un secret qui ne devrait pas etre ecrit directement ici');
       const userId = decodedToken.idClient;
       const role = decodedToken.role;
-      if ((idClient !== userId) || role !== 'admin') {
-        throw new Error('Invalid user ID');
-      } else {
+      if ((idClient === userId) || role === 'admin') {
         next();
+      } else {
+        res.status(401).send('Authorisation refusée');
       }
     } catch {
-      res.status(401).json({
-        error: new Error('Invalid request!')
-      });
+      res.status(401).send('Requête invalide, erreur inconnue');
     }
   }
 
