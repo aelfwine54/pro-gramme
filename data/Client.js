@@ -23,7 +23,8 @@ class Client {
       adresse: this.adresse,
       pays: this.pays,
       panier: this.panier,
-      courriel: this.courriel
+      courriel: this.courriel,
+      historique: this.historique
     };
   }
 }
