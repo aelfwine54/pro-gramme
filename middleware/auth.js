@@ -84,7 +84,7 @@ class Auth {
       const decodedToken = jwt.verify(token, 'Un secret qui ne devrait pas etre ecrit directement ici');
       const role = decodedToken.role;
       if (role !== 'admin') {
-        throw new Error('Vous n\'être pas administrateur');
+        res.status(401).send('Vous devez être administrateur pour effectuer cette tâche');
       } else {
         next();
       }
