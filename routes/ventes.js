@@ -48,7 +48,7 @@ const rechercherVenteValidation = {
 router.get('/', auth.admin, validate(rechercherVenteValidation), gVentes.recupererVente.bind(gVentes));
 
 /**
- * Effectue une vente, c'est à -dire transforme un panier en vente
+ * Effectue une vente, c'est-à-dire transforme un panier en vente
  */
 router.post('/', auth.localBody, validate(ajoutVenteValidation), gVentes.ajouterVente.bind(gVentes));
 
@@ -63,7 +63,7 @@ router.get('/:idVente', auth.admin, validate(adresseIdValidation), gVentes.recup
 router.put('/:idVente', auth.admin, validate(statusVenteValidation), gVentes.modifierStatus.bind(gVentes));
 
 /**
- * Annule une vente
+ * Annule une vente, mais seulement si elle n'a pas été préparée
  */
 router.delete('/:idVente', auth.localBody, validate(effacerVenteValidation), gVentes.annulerVente.bind(gVentes));
 
