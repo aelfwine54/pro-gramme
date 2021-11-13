@@ -22,15 +22,19 @@ class GestionVentes {
   annulerVente(req, res) {
     const id = parseInt(req.params.idVente);
     const vente = this.collectionVente.recupereVentes(id);
-    if (!vente) {
-      res.status(400).send(`La vente avec l'id ${id} n'a pas été trouvée`);
-    } else {
-      this.collectionVente.effacerVente(vente);
-      for (const i in vente.produits) {
-        const itemPanier = vente.produits[i];
-        this.collectionProduit.ajusterQuantite({ id: itemPanier.idProduit }, itemPanier.quantite);
+    if (vente) {
+      if (vente.status === this.statusPossibles.recue) {
+        this.collectionVente.effacerVente(vente);
+        for (const i in vente.produits) {
+          const itemPanier = vente.produits[i];
+          this.collectionProduit.ajusterQuantite({ id: itemPanier.idProduit }, itemPanier.quantite);
+        }
+        res.status(200).send(vente);
+      } else {
+        res.status(400).send('Il est trop tard pour annuler la vente');
       }
-      res.status(200).send();
+    } else {
+      res.status(400).send(`La vente avec l'id ${id} n'a pas été trouvée`);
     }
   }
 
